@@ -1,6 +1,26 @@
-type ExampleEntity @entity {
+type AuctionBidEntity @entity {
   id: ID!
-  count: BigInt!
-  previousAdmin: Bytes! # address
-  newAdmin: Bytes! # address
+  wizardId: BigInt!
+  aId: BigInt!
+  sender: Bytes!
+  value: BigInt!
+  extended: Boolean!
+}
+
+type AuctionCreatedEntity @entity {
+  id: ID!
+  wizardId: BigInt!
+  aId: BigInt!
+  startTime: BigInt!
+  endTime: BigInt!
+  oneOfOne: Boolean
+  isWhitelistDay: Boolean
+}
+
+type AuctionSettledEntity @entity {
+  id: ID!
+  wizardId: BigInt!
+  aId: BigInt!
+  winner: Bytes!
+  amount: BigInt!
 }
