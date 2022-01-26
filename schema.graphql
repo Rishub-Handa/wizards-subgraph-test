@@ -1,4 +1,14 @@
-type AuctionBidEntity @entity {
+type Wizard @entity {
+  id: ID!
+  wizardId: BigInt!
+  aId: BigInt!
+  winner: Bytes!
+  amount: BigInt!
+  oneOfOne: Boolean!
+  isWhitelistDay: Boolean!
+}
+
+type Bid @entity {
   id: ID!
   wizardId: BigInt!
   aId: BigInt!

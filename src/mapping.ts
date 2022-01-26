@@ -1,4 +1,4 @@
-import { BigInt } from "@graphprotocol/graph-ts"
+import { BigInt, Bytes } from "@graphprotocol/graph-ts"
 import {
   AuctionHouse,
 
@@ -7,22 +7,25 @@ import {
   AuctionSettled,
 
 } from "../generated/AuctionHouse/AuctionHouse"
-import { AuctionBidEntity, AuctionCreatedEntity, AuctionSettledEntity } from "../generated/schema"
+import { Wizard, Bid, AuctionCreatedEntity, AuctionSettledEntity } from "../generated/schema"
+
+// Have the entities centered around the wizard 
+//    When it was created, when it was settled, what bids it has, etc. 
 
 export function handleAuctionBid(event: AuctionBid): void {
 
   // const { wizardId, aId, sender, value, extended } = event.params;
 
   const id = `${event.params.wizardId.toHex()}:${event.params.sender.toHex()}:${event.params.value.toHex()}`
-  let entity = new AuctionBidEntity(id);
+  let bid = new Bid(id);
 
-  entity.wizardId = event.params.wizardId;
-  entity.aId = event.params.aId;
-  entity.sender = event.params.sender;
-  entity.value = event.params.value;
-  entity.extended = event.params.extended;
+  bid.wizardId = event.params.wizardId;
+  bid.aId = event.params.aId;
+  bid.sender = event.params.sender;
+  bid.value = event.params.value;
+  bid.extended = event.params.extended;
 
-  entity.save();
+  bid.save();
 
 }
 
@@ -30,30 +33,38 @@ export function handleAuctionCreated(event: AuctionCreated): void {
 
 
   // const { wizardId, aId, startTime, endTime, oneOfOne, isWhitelistDay } = event.params;
-  let entity = new AuctionCreatedEntity(event.params.wizardId.toHex());
+  let wizard = new Wizard(event.params.wizardId.toHex());
 
-  entity.wizardId = event.params.wizardId;
-  entity.aId = event.params.aId;
-  entity.startTime = event.params.startTime;
-  entity.endTime = event.params.endTime;
-  entity.oneOfOne = event.params.oneOfOne;
-  entity.isWhitelistDay = event.params.isWhitelistDay;
+  wizard.wizardId = event.params.wizardId;
+  wizard.aId = event.params.aId;
+  wizard.winner = new Bytes(0);
+  wizard.amount = new BigInt(0);
+  wizard.oneOfOne = event.params.oneOfOne;
+  wizard.isWhitelistDay = event.params.isWhitelistDay;
 
-  entity.save();
+  wizard.save();
 
 }
 
 export function handleAuctionSettled(event: AuctionSettled): void {
 
   // const { wizardId, aId, winner, amount } = event.params;
-  let entity = new AuctionSettledEntity(event.params.wizardId.toHex());
+  const id = event.params.wizardId.toHex()
+  let wizard = Wizard.load(id);
 
-  entity.wizardId = event.params.wizardId;
-  entity.aId = event.params.aId;
-  entity.winner = event.params.winner;
-  entity.amount = event.params.amount;
+  if (wizard == null) {
+    wizard = new Wizard(id);
 
-  entity.save();
+    wizard.wizardId = event.params.wizardId;
+    wizard.aId = event.params.aId;
+    wizard.oneOfOne = false;
+    wizard.isWhitelistDay = false;
+  }
+
+  wizard.winner = event.params.winner;
+  wizard.amount = event.params.amount;
+
+  wizard.save();
 
 }
 
