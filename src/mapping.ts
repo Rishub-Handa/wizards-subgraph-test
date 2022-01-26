@@ -7,7 +7,7 @@ import {
   AuctionSettled,
 
 } from "../generated/AuctionHouse/AuctionHouse"
-import { Wizard, Bid, AuctionCreatedEntity, AuctionSettledEntity } from "../generated/schema"
+import { Wizard, Bid } from "../generated/schema"
 
 // Have the entities centered around the wizard 
 //    When it was created, when it was settled, what bids it has, etc. 

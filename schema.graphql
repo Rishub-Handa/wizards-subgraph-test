@@ -16,21 +16,3 @@ type Bid @entity {
   value: BigInt!
   extended: Boolean!
 }
-
-type AuctionCreatedEntity @entity {
-  id: ID!
-  wizardId: BigInt!
-  aId: BigInt!
-  startTime: BigInt!
-  endTime: BigInt!
-  oneOfOne: Boolean
-  isWhitelistDay: Boolean
-}
-
-type AuctionSettledEntity @entity {
-  id: ID!
-  wizardId: BigInt!
-  aId: BigInt!
-  winner: Bytes!
-  amount: BigInt!
-}
